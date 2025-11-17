@@ -152,12 +152,15 @@
             { time: 65.91, text: "Siempre vivo rápido, ya rompí el velocímetro" } 
         ];
 
-        // Mensajes que aparecerán con el botón "Seguir" (MANUAL)
+        // ================================================================
+        // MENSAJES MANUALES (5 TEXTOS, LA FOTO ES EL 6TO PASO)
+        // ================================================================
         const MENSAJES_FINALES = [
-            "...", // Paso 1
-            "La letra me recordo lo poco que conozco de ti", // Paso 2
-            "..." // Paso 3 (Último texto antes de la foto)
-            // El Paso 4 ahora es la foto
+            "...", // Paso 1 
+            "La letra me recordo lo poco que conozco de ti", // Paso 2 
+            "...", // Paso 3
+            "ojala asi me creas un poquito jsjsj :)", // Paso 4 (Texto corregido)
+            "..." // Paso 5 (Nuevo paso de puntos suspensivos)
         ];
         
         // ===========================
@@ -233,31 +236,31 @@
         // EVENTO DEL BOTÓN PRINCIPAL
         // ===========================
         botonInicio.addEventListener("click", () => {
-            // Lógica MANUAL de mensajes finales (3 mensajes + 1 foto = 4 pasos)
+            // Lógica MANUAL (5 mensajes + 1 foto = 6 pasos)
             if (isCustomSequenceActive) {
                 
-                // El total de pasos manuales es MENSAJES_FINALES.length (3) + 1 (la foto) = 4 pasos
-                const totalPasos = MENSAJES_FINALES.length + 1; // 4
+                // Total de pasos manuales antes del Reinicio (5 mensajes + 1 foto)
+                const totalTextSteps = MENSAJES_FINALES.length; // 5
+                const totalManualSteps = totalTextSteps + 1; // 6 pasos
 
-                // 1. LÓGICA DE REINICIO (Paso 5: Clic después de mostrar la foto)
-                // Se ejecuta cuando customMessageIndex es igual al totalPasos (4)
-                if (customMessageIndex === totalPasos) { 
+                // 1. LÓGICA DE REINICIO (Paso 7: customMessageIndex === 6)
+                if (customMessageIndex === totalManualSteps) { 
                     reiniciarPrograma(); 
                     return;
                 }
                 
-                // 2. PASO DE LA FOTO (Paso 4: customMessageIndex === 3)
-                if (customMessageIndex === MENSAJES_FINALES.length) { 
+                // 2. PASO DE LA FOTO (Paso 6: customMessageIndex === 5)
+                if (customMessageIndex === totalTextSteps) { 
                     contenedorLetras.style.display = 'none'; // Oculta el texto
                     contenedorImagen.style.display = 'flex'; // Muestra la foto
                     
                     botonInicio.innerText = "Reiniciar"; // El botón cambia a Reiniciar
-                    customMessageIndex++; // Incrementa para esperar el paso de Reinicio
+                    customMessageIndex++; // Incrementa a 6 para esperar el paso de Reinicio
                     return;
                 }
 
-                // 3. PASOS DE MENSAJE (Pasos 1 a 3: customMessageIndex < 3)
-                if (customMessageIndex < MENSAJES_FINALES.length) {
+                // 3. PASOS DE MENSAJE (Pasos 1 a 5: customMessageIndex < 5)
+                if (customMessageIndex < totalTextSteps) {
                     typeWriter(MENSAJES_FINALES[customMessageIndex]);
                     customMessageIndex++;
                 }
