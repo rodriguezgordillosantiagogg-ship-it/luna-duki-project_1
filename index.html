@@ -42,6 +42,7 @@
             white-space: pre-wrap;
             line-height: 1.6;
             z-index: 20;
+            transition: all 0.3s ease-out; 
         }
         
         button {
@@ -74,7 +75,7 @@
             z-index: 20;
         }
 
-        /* La imagen de prueba ahora está oculta, usamos el fondo CSS */
+        /* Ocultar la imagen de prueba */
         #imagen-prueba { display: none; }
     </style>
 </head>
@@ -93,29 +94,30 @@
     <footer>Versión HTML del programa original en Java Swing</footer>
 
     <script>
-        // ===========================
-        // LETRAS DE LA CANCIÓN
-        // ===========================
-        const LETRAS_DUKI = [
-            "Metido en mi mundo utópico\nCon tanto hielo que me creo nórdico (yah, yah, yah)",
-            "Usé lo' podere', no tengo Kalashnikov\nHijo de la luna, ojo telescópico (prr, Duko)",
-            "Ahora estoy flotando, ya soy anti gravedad\nDebe ser por la cámara de aire de mis Nike'",
-            "Suelo esforzarme el doble cuándo la cosa va mal\nIgual me salgo con la mía porque me sé reinventar (yah, yah, yah)",
-            "Salto alto como un Jumpman (Jumpman, Jumpman)\nYo me compro Jordán, mami, no uso Balenciaga (Balenciaga)",
-            "Por la ciudad cazando fantasmas (fantasma')\nDe esos que quieren ser primera plana (¡prra!)",
-            "Saltando tan alto que la luna está a centímetro'\nLa police afuera vigilándome el perímetro",
-            "Siempre vivo rápido, ya rompí el velocímetro\nYa sé que estoy fresco, no hace falta ni decírmelo"
+        // =================================================================
+        // SINCRONIZACIÓN AUTOMÁTICA
+        // =================================================================
+        const SINCRONIZACION = [
+            { time: 0.0, text: "Presiona 'Luna - Duki 🌙' para empezar." }, // Mensaje inicial
+            
+            // LETRAS DE LA CANCIÓN
+            { time: 2.50, text: "Metido en mi mundo utópico\nCon tanto hielo que me creo nórdico (yah, yah, yah)" }, 
+            { time: 7.00, text: "Usé lo' podere', no tengo Kalashnikov\nHijo de la luna, ojo telescópico (prr, Duko)" },
+            { time: 11.50, text: "Ahora estoy flotando, ya soy anti gravedad\nDebe ser por la cámara de aire de mis Nike'" }, 
+            { time: 16.00, text: "Suelo esforzarme el doble cuándo la cosa va mal\nIgual me salgo con la mía porque me sé reinventar (yah, yah, yah)" }, 
+            { time: 21.00, text: "Salto alto como un Jumpman (Jumpman, Jumpman)\nYo me compro Jordán, mami, no uso Balenciaga (Balenciaga)" }, 
+            { time: 25.00, text: "Por la ciudad cazando fantasmas (fantasma')\nDe esos que quieren ser primera plana (¡prra!)" }, 
+            { time: 29.50, text: "Saltando tan alto que la luna está a centímetro'\nLa police afuera vigilándome el perímetro" }, 
+            { time: 34.00, text: "Siempre vivo rápido, ya rompí el velocímetro\nYa sé que estoy fresco, no hace falta ni decírmelo" }, 
+            
+            // MENSAJES FINALES SOLICITADOS (Solo dos)
+            { time: 39.00, text: "La letra me recordo lo poco que conozco de ti" }, // Mensaje 1
+            { time: 42.00, text: "ojala asi a lo mejor me creas un poquito jsjs :)" }, // Mensaje 2 (Corregido)
+            
+            // PUNTO FINAL para que el botón Reiniciar aparezca
+            { time: 45.00, text: "" } 
         ];
         
-        // =======================================================
-        // MENSAJES FINALES: SIN MENSAJES PERSONALIZADOS
-        // =======================================================
-        const MENSAJES_FINALES = [
-            "La letra me recordo lo poco que conozco de ti",
-            "ojala asi a lo mejor me crees un poquito jsjs :)",
-            "Sigue volando alto..." 
-        ];
-
         // ===========================
         // VARIABLES Y ELEMENTOS HTML
         // ===========================
@@ -124,12 +126,17 @@
         const botonInicio = document.getElementById("botonInicio");
         const contenedorLetras = document.getElementById("contenedor-letras");
         const audioLuna = document.getElementById("audio-luna");
-        const typingSpeed = 30;
 
         // ===========================
-        // FUNCIONES DE CONTROL
+        // FUNCIÓN DE ESCRITURA
         // ===========================
+        function typeWriter(text) {
+            contenedorLetras.innerHTML = text.replace(/\n/g, '<br>');
+        }
 
+        // ===========================
+        // FUNCIÓN DE REINICIO
+        // ===========================
         function reiniciarPrograma() {
             botonInicio.innerText = "Luna - Duki 🌙";
             contenedorLetras.innerHTML = "<p>Presiona 'Luna - Duki 🌙' para empezar.</p>";
@@ -137,64 +144,74 @@
             isPlaying = false;
             audioLuna.pause();
             audioLuna.currentTime = 0;
+            botonInicio.disabled = false;
         }
 
-        function typeWriter(text, i) {
-            return new Promise(resolve => {
-                if (i < text.length) {
-                    contenedorLetras.innerHTML += text.charAt(i) === '\n' ? '<br>' : text.charAt(i);
-                    setTimeout(() => {
-                        resolve(typeWriter(text, i + 1));
-                    }, typingSpeed);
-                } else {
-                    resolve();
-                }
-            });
-        }
+        // ===========================
+        // EVENTO DE TIEMPO CLAVE (SINCRONIZACIÓN)
+        // ===========================
+        audioLuna.addEventListener("timeupdate", () => {
+            const tiempoActual = audioLuna.currentTime;
+            
+            if (!isPlaying) return;
 
-        async function mostrarSiguienteLetra() {
-            if (indiceActual < LETRAS_DUKI.length) {
-                contenedorLetras.innerHTML = `<p>Luna (Parte ${indiceActual + 1})</p>`;
-                botonInicio.innerText = "Siguiente verso >>";
-                botonInicio.disabled = true;
-
-                await typeWriter(LETRAS_DUKI[indiceActual], 0);
-
+            // 1. Verificar si hay una nueva línea para mostrar
+            if (indiceActual < SINCRONIZACION.length - 1 && tiempoActual >= SINCRONIZACION[indiceActual + 1].time) {
                 indiceActual++;
-                botonInicio.disabled = false;
-            } else if (indiceActual < LETRAS_DUKI.length + MENSAJES_FINALES.length) {
-                let mensajeIndex = indiceActual - LETRAS_DUKI.length;
-                contenedorLetras.innerHTML = `<p>${MENSAJES_FINALES[mensajeIndex]}</p>`;
-                
-                if (mensajeIndex === MENSAJES_FINALES.length - 1) {
-                    botonInicio.innerText = "Reiniciar";
-                } else {
-                    botonInicio.innerText = "Siguiente mensaje >>";
-                }
-
-                indiceActual++;
-
-            } else {
-                reiniciarPrograma();
+                typeWriter(SINCRONIZACION[indiceActual].text);
             }
-        }
+        });
+
+        // 2. Manejar el fin del audio para mostrar el botón de Reiniciar
+        audioLuna.addEventListener("ended", () => {
+            // Cuando el audio termina, muestra el botón de Reiniciar
+            botonInicio.innerText = "Reiniciar";
+            botonInicio.disabled = false;
+            isPlaying = false; 
+        });
+
 
         // ===========================
         // EVENTO DEL BOTÓN PRINCIPAL
         // ===========================
         botonInicio.addEventListener("click", () => {
+            if (botonInicio.innerText === "Reiniciar") {
+                // Si el texto es Reiniciar, llama a la función de Reinicio
+                reiniciarPrograma();
+                return; 
+            }
+
             if (!isPlaying) {
+                // PRIMER CLIC: INICIAR
                 isPlaying = true;
-                // Reproducción del audio
-                audioLuna.play().catch(e => {
-                    // Muestra el mensaje de error si el audio falla
-                    alert("No se pudo iniciar el audio. Por favor, verifica que los archivos se llamen 'luna.mp3' y 'fondo.jpg' en GitHub."); 
-                }); 
-                mostrarSiguienteLetra();
+                botonInicio.disabled = true; 
+                botonInicio.innerText = "Reproduciendo..."; 
+
+                audioLuna.play().then(() => {
+                    // Si la reproducción es exitosa
+                    indiceActual = 0;
+                    typeWriter(SINCRONIZACION[0].text);
+                }).catch(e => {
+                    // Si falla el audio, se muestra el mensaje de error y se reinicia
+                    alert("No se pudo iniciar el audio. Por favor, asegúrate de que el archivo 'luna.mp3' sea válido y esté en minúsculas en GitHub."); 
+                    console.error("Error de reproducción:", e);
+                    reiniciarPrograma(); // Reinicia el estado
+                });
+            } else if (audioLuna.paused) {
+                // CLIC CUANDO ESTÁ PAUSADO: RESUMIR
+                audioLuna.play();
+                botonInicio.innerText = "Reproduciendo...";
             } else {
-                mostrarSiguienteLetra();
+                // CLIC CUANDO ESTÁ SONANDO: PAUSAR
+                audioLuna.pause();
+                botonInicio.innerText = "Pausado (Clic para continuar)";
             }
         });
+
+        // Mostrar el mensaje inicial al cargar la página
+        window.onload = () => {
+             typeWriter(SINCRONIZACION[0].text);
+        };
     </script>
 </body>
 </html>
