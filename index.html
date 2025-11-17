@@ -49,6 +49,19 @@
             align-items: center;
             justify-content: center;
         }
+
+        #contenedor-imagen {
+            width: 90%;
+            max-width: 600px;
+            min-height: 150px;
+            margin-bottom: 20px;
+            display: none; /* Inicia oculto */
+            z-index: 20;
+            /* Para centrar la imagen */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
         
         button {
             background-color: #7b61ff;
@@ -94,6 +107,11 @@
         <p>&nbsp;</p>
     </div>
 
+    <div id="contenedor-imagen">
+        <img id="foto-final" src="foto_final.jpg" alt="Foto Final" style="max-width: 100%; max-height: 100%; border-radius: 10px;">
+    </div>
+
+
     <button id="botonInicio">Luna - Duki 🌙</button>
 
     <footer>Versión HTML del programa original en Java Swing</footer>
@@ -136,10 +154,10 @@
 
         // Mensajes que aparecerán con el botón "Seguir" (MANUAL)
         const MENSAJES_FINALES = [
-            "...", // Paso 1 (NUEVO ORDEN)
+            "...", // Paso 1
             "La letra me recordo lo poco que conozco de ti", // Paso 2
-            "...", // Paso 3 (Puntos suspensivos repetidos)
-            "ojala asi me creas asi sea un poquito :)" // Paso 4 (Texto corregido)
+            "...", // Paso 3
+            "ojala asi me creas asi sea un poquito :)" // Paso 4
         ];
         
         // ===========================
@@ -151,6 +169,8 @@
         let customMessageIndex = 0; 
         const botonInicio = document.getElementById("botonInicio");
         const contenedorLetras = document.getElementById("contenedor-letras");
+        const contenedorImagen = document.getElementById("contenedor-imagen"); 
+        const fotoFinal = document.getElementById("foto-final"); 
         const audioLuna = document.getElementById("audio-luna");
 
         // ===========================
@@ -166,6 +186,11 @@
         function reiniciarPrograma() {
             botonInicio.innerText = "Luna - Duki 🌙";
             contenedorLetras.innerHTML = "<p>&nbsp;</p>"; 
+            
+            // Lógica para ocultar imagen y mostrar letras
+            contenedorImagen.style.display = 'none';
+            contenedorLetras.style.display = 'flex'; 
+
             indiceActual = 0;
             isPlaying = false;
             isCustomSequenceActive = false;
@@ -208,24 +233,29 @@
         // EVENTO DEL BOTÓN PRINCIPAL
         // ===========================
         botonInicio.addEventListener("click", () => {
-            // Lógica MANUAL de mensajes finales
+            // Lógica MANUAL de mensajes finales (5 PASOS: 4 mensajes + 1 foto)
             if (isCustomSequenceActive) {
                 
-                // 1. Si ya se mostró el último mensaje (4), el siguiente clic es para Reiniciar
-                if (customMessageIndex === MENSAJES_FINALES.length) {
-                    reiniciarPrograma(); // Ejecuta la función de reinicio
+                // 1. LÓGICA DE REINICIO (Paso 6: Clic después de mostrar la foto)
+                if (customMessageIndex === MENSAJES_FINALES.length + 1) { 
+                    reiniciarPrograma(); 
                     return;
                 }
                 
-                // 2. Si todavía hay mensajes, muestra el siguiente
+                // 2. PASO DE LA FOTO (Paso 5: customMessageIndex === 4)
+                if (customMessageIndex === MENSAJES_FINALES.length) { 
+                    contenedorLetras.style.display = 'none'; // Oculta el texto
+                    contenedorImagen.style.display = 'flex'; // Muestra la foto
+                    
+                    botonInicio.innerText = "Reiniciar"; // El botón cambia a Reiniciar
+                    customMessageIndex++; // Incrementa para esperar el paso de Reinicio
+                    return;
+                }
+
+                // 3. PASOS DE MENSAJE (Pasos 1 a 4: customMessageIndex < 4)
                 if (customMessageIndex < MENSAJES_FINALES.length) {
                     typeWriter(MENSAJES_FINALES[customMessageIndex]);
                     customMessageIndex++;
-                }
-                
-                // 3. Si se acaba de mostrar el último mensaje (el 4), cambia el botón a "Reiniciar"
-                if (customMessageIndex === MENSAJES_FINALES.length) {
-                    botonInicio.innerText = "Reiniciar"; 
                 }
                 
                 return;
