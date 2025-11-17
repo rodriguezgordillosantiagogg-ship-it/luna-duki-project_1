@@ -108,12 +108,12 @@
         ];
         
         // =======================================================
-        // MENSAJES FINALES: SE HA ELIMINADO EL MENSAJE PERSONALIZADO
+        // MENSAJES FINALES: SIN MENSAJES PERSONALIZADOS
         // =======================================================
         const MENSAJES_FINALES = [
             "La letra me recordo lo poco que conozco de ti",
             "ojala asi a lo mejor me crees un poquito jsjs :)",
-            "Sigue volando alto..." // Reemplazo del mensaje final
+            "Sigue volando alto..." 
         ];
 
         // ===========================
@@ -188,7 +188,7 @@
                 // Reproducción del audio
                 audioLuna.play().catch(e => {
                     // Muestra el mensaje de error si el audio falla
-                    alert("No se pudo iniciar el audio. Por favor, asegúrate de que el archivo 'luna.mp3' esté en minúsculas en GitHub."); 
+                    alert("No se pudo iniciar el audio. Por favor, verifica que los archivos se llamen 'luna.mp3' y 'fondo.jpg' en GitHub."); 
                 }); 
                 mostrarSiguienteLetra();
             } else {
