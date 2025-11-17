@@ -6,14 +6,14 @@
     <title>Luna - Duki 🌙</title>
     <style>
         body {
-            /* REVISAR ESTA LÍNEA si la imagen no aparece: 
-               Verifica que la extensión sea .jpg y no .jpg.jpg */
-            background: linear-gradient(180deg, rgba(15, 23, 36, 0.8), rgba(8, 18, 41, 0.8)), url('1000081279.jpg');
+            /* RUTA CORREGIDA: Usando el nombre 'fondo.jpg' */
+            background: linear-gradient(180deg, rgba(15, 23, 36, 0.8), rgba(8, 18, 41, 0.8)), url('fondo.jpg');
             
             background-repeat: no-repeat;
             background-size: cover;
             background-attachment: fixed;
             background-position: center center;
+            background-color: #0f1724; /* Fondo de respaldo */
 
             color: white;
             font-family: 'Arial', sans-serif;
@@ -41,7 +41,7 @@
             text-align: center;
             white-space: pre-wrap;
             line-height: 1.6;
-            z-index: 20; /* Asegurar que la letra esté sobre la imagen de prueba */
+            z-index: 20;
         }
         
         button {
@@ -74,24 +74,15 @@
             z-index: 20;
         }
 
-        /* Estilo para la imagen de prueba */
-        #imagen-prueba {
-            position: absolute;
-            top: 0;
-            left: 0;
-            opacity: 0.2; /* Para que sea sutil */
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: 10;
-        }
+        /* La imagen de prueba ahora está oculta, usamos el fondo CSS */
+        #imagen-prueba { display: none; }
     </style>
 </head>
 <body>
 
-    <audio id="audio-luna" src="Luna.mp3" preload="auto"></audio>
+    <audio id="audio-luna" src="luna.mp3" preload="auto"></audio>
 
-    <img id="imagen-prueba" src="1000081279.jpg" alt="Fondo de Duki Prueba">
+    <img id="imagen-prueba" src="fondo.jpg" alt="Fondo de Duki Prueba">
 
     <div id="contenedor-letras">
         <p>Presiona "Luna - Duki 🌙" para empezar.</p>
@@ -102,11 +93,6 @@
     <footer>Versión HTML del programa original en Java Swing</footer>
 
     <script>
-        // ===========================
-        // MENSAJE FINAL PERSONALIZADO
-        // ===========================
-        const MENSAJE_FINAL_PERSONALIZADO = "¡FIN DEL VIAJE! Gracias por saltar alto y escuchar la música.";
-
         // ===========================
         // LETRAS DE LA CANCIÓN
         // ===========================
@@ -121,11 +107,13 @@
             "Siempre vivo rápido, ya rompí el velocímetro\nYa sé que estoy fresco, no hace falta ni decírmelo"
         ];
         
-        // Mensajes que aparecerán después de la letra de la canción
+        // =======================================================
+        // MENSAJES FINALES: SE HA ELIMINADO EL MENSAJE PERSONALIZADO
+        // =======================================================
         const MENSAJES_FINALES = [
             "La letra me recordo lo poco que conozco de ti",
             "ojala asi a lo mejor me crees un poquito jsjs :)",
-            MENSAJE_FINAL_PERSONALIZADO
+            "Sigue volando alto..." // Reemplazo del mensaje final
         ];
 
         // ===========================
@@ -136,7 +124,6 @@
         const botonInicio = document.getElementById("botonInicio");
         const contenedorLetras = document.getElementById("contenedor-letras");
         const audioLuna = document.getElementById("audio-luna");
-        const imagenPrueba = document.getElementById("imagen-prueba"); // Obtenemos la imagen de prueba
         const typingSpeed = 30;
 
         // ===========================
@@ -150,7 +137,6 @@
             isPlaying = false;
             audioLuna.pause();
             audioLuna.currentTime = 0;
-            imagenPrueba.style.display = 'block'; // Mostrar imagen de prueba si estaba oculta
         }
 
         function typeWriter(text, i) {
@@ -167,9 +153,6 @@
         }
 
         async function mostrarSiguienteLetra() {
-            // Oculta la imagen de prueba para que solo se vea el fondo CSS
-            imagenPrueba.style.display = 'none';
-
             if (indiceActual < LETRAS_DUKI.length) {
                 contenedorLetras.innerHTML = `<p>Luna (Parte ${indiceActual + 1})</p>`;
                 botonInicio.innerText = "Siguiente verso >>";
@@ -204,8 +187,8 @@
                 isPlaying = true;
                 // Reproducción del audio
                 audioLuna.play().catch(e => {
-                    alert("No se pudo iniciar el audio. Por favor, asegúrate de que el archivo 'Luna.mp3' esté en la misma carpeta y sea un archivo MP3 válido.");
-                    console.error("Error de reproducción:", e);
+                    // Muestra el mensaje de error si el audio falla
+                    alert("No se pudo iniciar el audio. Por favor, asegúrate de que el archivo 'luna.mp3' esté en minúsculas en GitHub."); 
                 }); 
                 mostrarSiguienteLetra();
             } else {
@@ -215,5 +198,3 @@
     </script>
 </body>
 </html>
-
-
