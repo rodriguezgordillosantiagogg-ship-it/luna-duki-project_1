@@ -31,6 +31,7 @@
         #contenedor-letras {
             width: 90%;
             max-width: 600px;
+            /* Se mantiene una altura mínima para que el contenedor no colapse */
             min-height: 150px; 
             padding: 20px;
             background-color: rgba(255, 255, 255, 0.1);
@@ -43,6 +44,11 @@
             line-height: 1.6;
             z-index: 20;
             transition: all 0.3s ease-out; 
+            
+            /* CSS para centrar el texto verticalmente en el contenedor vacío */
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         button {
@@ -86,7 +92,7 @@
     <img id="imagen-prueba" src="fondo.jpg" alt="Fondo de Duki Prueba">
 
     <div id="contenedor-letras">
-        <p>Presiona "Luna - Duki 🌙" para empezar.</p>
+        <p>&nbsp;</p>
     </div>
 
     <button id="botonInicio">Luna - Duki 🌙</button>
@@ -95,27 +101,28 @@
 
     <script>
         // =================================================================
-        // SINCRONIZACIÓN AUTOMÁTICA
+        // SINCRONIZACIÓN AUTOMÁTICA (Tiempos ajustados a SU archivo de audio)
         // =================================================================
         const SINCRONIZACION = [
-            { time: 0.0, text: "Presiona 'Luna - Duki 🌙' para empezar." }, // Mensaje inicial
+            // ELIMINADO EL MENSAJE DE INICIO
+            { time: 0.0, text: "" }, 
             
-            // LETRAS DE LA CANCIÓN
+            // LETRAS DE LA CANCIÓN (Tiempos sincronizados)
             { time: 2.50, text: "Metido en mi mundo utópico\nCon tanto hielo que me creo nórdico (yah, yah, yah)" }, 
-            { time: 7.00, text: "Usé lo' podere', no tengo Kalashnikov\nHijo de la luna, ojo telescópico (prr, Duko)" },
-            { time: 11.50, text: "Ahora estoy flotando, ya soy anti gravedad\nDebe ser por la cámara de aire de mis Nike'" }, 
-            { time: 16.00, text: "Suelo esforzarme el doble cuándo la cosa va mal\nIgual me salgo con la mía porque me sé reinventar (yah, yah, yah)" }, 
-            { time: 21.00, text: "Salto alto como un Jumpman (Jumpman, Jumpman)\nYo me compro Jordán, mami, no uso Balenciaga (Balenciaga)" }, 
-            { time: 25.00, text: "Por la ciudad cazando fantasmas (fantasma')\nDe esos que quieren ser primera plana (¡prra!)" }, 
-            { time: 29.50, text: "Saltando tan alto que la luna está a centímetro'\nLa police afuera vigilándome el perímetro" }, 
-            { time: 34.00, text: "Siempre vivo rápido, ya rompí el velocímetro\nYa sé que estoy fresco, no hace falta ni decírmelo" }, 
+            { time: 6.80, text: "Usé lo' podere', no tengo Kalashnikov\nHijo de la luna, ojo telescópico (prr, Duko)" },
+            { time: 11.30, text: "Ahora estoy flotando, ya soy anti gravedad\nDebe ser por la cámara de aire de mis Nike'" }, 
+            { time: 15.80, text: "Suelo esforzarme el doble cuándo la cosa va mal\nIgual me salgo con la mía porque me sé reinventar (yah, yah, yah)" }, 
+            { time: 20.60, text: "Salto alto como un Jumpman (Jumpman, Jumpman)\nYo me compro Jordán, mami, no uso Balenciaga (Balenciaga)" }, 
+            { time: 24.90, text: "Por la ciudad cazando fantasmas (fantasma')\nDe esos que quieren ser primera plana (¡prra!)" }, 
+            { time: 29.40, text: "Saltando tan alto que la luna está a centímetro'\nLa police afuera vigilándome el perímetro" }, 
+            { time: 33.80, text: "Siempre vivo rápido, ya rompí el velocímetro\nYa sé que estoy fresco, no hace falta ni decírmelo" }, 
             
-            // MENSAJES FINALES SOLICITADOS (Solo dos)
-            { time: 39.00, text: "La letra me recordo lo poco que conozco de ti" }, // Mensaje 1
-            { time: 42.00, text: "ojala asi a lo mejor me creas un poquito jsjs :)" }, // Mensaje 2 (Corregido)
+            // MENSAJES FINALES SOLICITADOS
+            { time: 39.50, text: "La letra me recordo lo poco que conozco de ti" }, // Mensaje 1
+            { time: 43.00, text: "ojala asi a lo mejor me creas un poquito jsjs :)" }, // Mensaje 2
             
             // PUNTO FINAL para que el botón Reiniciar aparezca
-            { time: 45.00, text: "" } 
+            { time: 46.50, text: "" } 
         ];
         
         // ===========================
@@ -131,6 +138,7 @@
         // FUNCIÓN DE ESCRITURA
         // ===========================
         function typeWriter(text) {
+            // Asegura que el contenido se reemplace con la nueva letra
             contenedorLetras.innerHTML = text.replace(/\n/g, '<br>');
         }
 
@@ -139,7 +147,8 @@
         // ===========================
         function reiniciarPrograma() {
             botonInicio.innerText = "Luna - Duki 🌙";
-            contenedorLetras.innerHTML = "<p>Presiona 'Luna - Duki 🌙' para empezar.</p>";
+            // Contenedor de letras vacío al reiniciar
+            contenedorLetras.innerHTML = "<p>&nbsp;</p>"; 
             indiceActual = 0;
             isPlaying = false;
             audioLuna.pause();
@@ -168,6 +177,7 @@
             botonInicio.innerText = "Reiniciar";
             botonInicio.disabled = false;
             isPlaying = false; 
+            // Deja el contenedor vacío o con el último texto (el mensaje final)
         });
 
 
@@ -188,9 +198,10 @@
                 botonInicio.innerText = "Reproduciendo..."; 
 
                 audioLuna.play().then(() => {
-                    // Si la reproducción es exitosa
-                    indiceActual = 0;
-                    typeWriter(SINCRONIZACION[0].text);
+                    // Si la reproducción es exitosa, muestra la primera línea inmediatamente si el tiempo es 0.0
+                    if (SINCRONIZACION[0].time === 0.0) {
+                        typeWriter(SINCRONIZACION[0].text);
+                    }
                 }).catch(e => {
                     // Si falla el audio, se muestra el mensaje de error y se reinicia
                     alert("No se pudo iniciar el audio. Por favor, asegúrate de que el archivo 'luna.mp3' sea válido y esté en minúsculas en GitHub."); 
@@ -208,9 +219,9 @@
             }
         });
 
-        // Mostrar el mensaje inicial al cargar la página
+        // Mostrar el estado inicial al cargar la página (contenedor vacío)
         window.onload = () => {
-             typeWriter(SINCRONIZACION[0].text);
+             typeWriter("<p>&nbsp;</p>");
         };
     </script>
 </body>
