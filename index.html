@@ -1,4 +1,4 @@
-      <!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -6,14 +6,14 @@
     <title>Luna - Duki 🌙</title>
     <style>
         body {
-            /* RUTA CORREGIDA: Usando el nombre 'fondo.jpg' */
+            /* RUTA: Debe existir 'fondo.jpg' en su repositorio */
             background: linear-gradient(180deg, rgba(15, 23, 36, 0.8), rgba(8, 18, 41, 0.8)), url('fondo.jpg');
             
             background-repeat: no-repeat;
             background-size: cover;
             background-attachment: fixed;
             background-position: center center;
-            background-color: #0f1724; /* Fondo de respaldo */
+            background-color: #0f1724; 
 
             color: white;
             font-family: 'Arial', sans-serif;
@@ -31,7 +31,6 @@
         #contenedor-letras {
             width: 90%;
             max-width: 600px;
-            /* Se mantiene una altura mínima para que el contenedor no colapse */
             min-height: 150px; 
             padding: 20px;
             background-color: rgba(255, 255, 255, 0.1);
@@ -45,7 +44,7 @@
             z-index: 20;
             transition: all 0.3s ease-out; 
             
-            /* CSS para centrar el texto verticalmente en el contenedor vacío */
+            /* Para centrar el texto verticalmente */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -101,13 +100,13 @@
 
     <script>
         // =================================================================
-        // SINCRONIZACIÓN AUTOMÁTICA (AJUSTADA AL MÁXIMO PARA SU AUDIO)
+        // SINCRONIZACIÓN AUTOMÁTICA (AJUSTADA AL MÁXIMO)
         // =================================================================
         const SINCRONIZACION = [
-            // ELIMINADO EL MENSAJE DE INICIO
+            // ÁREA VACÍA AL INICIO
             { time: 0.0, text: "" }, 
             
-            // LETRAS DE LA CANCIÓN (TIEMPOS RE-AJUSTADOS)
+            // LETRAS DE LA CANCIÓN 
             { time: 2.40, text: "Metido en mi mundo utópico\nCon tanto hielo que me creo nórdico (yah, yah, yah)" }, 
             { time: 6.70, text: "Usé lo' podere', no tengo Kalashnikov\nHijo de la luna, ojo telescópico (prr, Duko)" },
             { time: 11.20, text: "Ahora estoy flotando, ya soy anti gravedad\nDebe ser por la cámara de aire de mis Nike'" }, 
@@ -146,7 +145,6 @@
         // ===========================
         function reiniciarPrograma() {
             botonInicio.innerText = "Luna - Duki 🌙";
-            // Contenedor de letras vacío al reiniciar
             contenedorLetras.innerHTML = "<p>&nbsp;</p>"; 
             indiceActual = 0;
             isPlaying = false;
@@ -172,7 +170,6 @@
 
         // 2. Manejar el fin del audio para mostrar el botón de Reiniciar
         audioLuna.addEventListener("ended", () => {
-            // Cuando el audio termina, muestra el botón de Reiniciar
             botonInicio.innerText = "Reiniciar";
             botonInicio.disabled = false;
             isPlaying = false; 
@@ -195,7 +192,7 @@
                 botonInicio.innerText = "Reproduciendo..."; 
 
                 audioLuna.play().then(() => {
-                    // Si la reproducción es exitosa, muestra la primera línea vacía
+                    // Si la reproducción es exitosa, muestra el texto en el tiempo 0.0 (que es vacío)
                     if (SINCRONIZACION[0].time === 0.0) {
                         typeWriter(SINCRONIZACION[0].text);
                     }
@@ -203,7 +200,7 @@
                     // Si falla el audio
                     alert("No se pudo iniciar el audio. Por favor, asegúrate de que el archivo 'luna.mp3' sea válido y esté en minúsculas en GitHub."); 
                     console.error("Error de reproducción:", e);
-                    reiniciarPrograma(); // Reinicia el estado
+                    reiniciarPrograma(); 
                 });
             } else if (audioLuna.paused) {
                 // CLIC CUANDO ESTÁ PAUSADO: RESUMIR
