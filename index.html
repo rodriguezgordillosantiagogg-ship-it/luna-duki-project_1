@@ -156,8 +156,8 @@
         const MENSAJES_FINALES = [
             "...", // Paso 1
             "La letra me recordo lo poco que conozco de ti", // Paso 2
-            "...", // Paso 3
-            "ojala asi me creas asi sea un poquito :)" // Paso 4
+            "..." // Paso 3 (Último texto antes de la foto)
+            // El Paso 4 ahora es la foto
         ];
         
         // ===========================
@@ -233,16 +233,20 @@
         // EVENTO DEL BOTÓN PRINCIPAL
         // ===========================
         botonInicio.addEventListener("click", () => {
-            // Lógica MANUAL de mensajes finales (5 PASOS: 4 mensajes + 1 foto)
+            // Lógica MANUAL de mensajes finales (3 mensajes + 1 foto = 4 pasos)
             if (isCustomSequenceActive) {
                 
-                // 1. LÓGICA DE REINICIO (Paso 6: Clic después de mostrar la foto)
-                if (customMessageIndex === MENSAJES_FINALES.length + 1) { 
+                // El total de pasos manuales es MENSAJES_FINALES.length (3) + 1 (la foto) = 4 pasos
+                const totalPasos = MENSAJES_FINALES.length + 1; // 4
+
+                // 1. LÓGICA DE REINICIO (Paso 5: Clic después de mostrar la foto)
+                // Se ejecuta cuando customMessageIndex es igual al totalPasos (4)
+                if (customMessageIndex === totalPasos) { 
                     reiniciarPrograma(); 
                     return;
                 }
                 
-                // 2. PASO DE LA FOTO (Paso 5: customMessageIndex === 4)
+                // 2. PASO DE LA FOTO (Paso 4: customMessageIndex === 3)
                 if (customMessageIndex === MENSAJES_FINALES.length) { 
                     contenedorLetras.style.display = 'none'; // Oculta el texto
                     contenedorImagen.style.display = 'flex'; // Muestra la foto
@@ -252,7 +256,7 @@
                     return;
                 }
 
-                // 3. PASOS DE MENSAJE (Pasos 1 a 4: customMessageIndex < 4)
+                // 3. PASOS DE MENSAJE (Pasos 1 a 3: customMessageIndex < 3)
                 if (customMessageIndex < MENSAJES_FINALES.length) {
                     typeWriter(MENSAJES_FINALES[customMessageIndex]);
                     customMessageIndex++;
