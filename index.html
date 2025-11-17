@@ -104,23 +104,24 @@
         // =================================================================
 
         // La SINCRONIZACION solo contiene las letras de la canción (AUTOMÁTICO)
+        // ** TIEMPOS AJUSTADOS POR -0.20s PARA COMPENSAR LATENCIA **
         const SINCRONIZACION = [
             { time: 0.0, text: "" }, 
-            { time: 2.40, text: "Metido en mi mundo utópico\nCon tanto hielo que me creo nórdico (yah, yah, yah)" }, 
-            { time: 6.70, text: "Usé lo' podere', no tengo Kalashnikov\nHijo de la luna, ojo telescópico (prr, Duko)" },
-            { time: 11.20, text: "Ahora estoy flotando, ya soy anti gravedad\nDebe ser por la cámara de aire de mis Nike'" }, 
-            { time: 15.70, text: "Suelo esforzarme el doble cuándo la cosa va mal\nIgual me salgo con la mía porque me sé reinventar (yah, yah, yah)" }, 
-            { time: 20.50, text: "Salto alto como un Jumpman (Jumpman, Jumpman)\nYo me compro Jordán, mami, no uso Balenciaga (Balenciaga)" }, 
-            { time: 24.80, text: "Por la ciudad cazando fantasmas (fantasma')\nDe esos que quieren ser primera plana (¡prra!)" }, 
-            { time: 29.30, text: "Saltando tan alto que la luna está a centímetro'\nLa police afuera vigilándome el perímetro" }, 
-            { time: 33.70, text: "Siempre vivo rápido, ya rompí el velocímetro\nYa sé que estoy fresco, no hace falta ni decírmelo" } 
+            { time: 2.20, text: "Metido en mi mundo utópico\nCon tanto hielo que me creo nórdico (yah, yah, yah)" }, // Antes 2.40
+            { time: 6.50, text: "Usé lo' podere', no tengo Kalashnikov\nHijo de la luna, ojo telescópico (prr, Duko)" }, // Antes 6.70
+            { time: 11.00, text: "Ahora estoy flotando, ya soy anti gravedad\nDebe ser por la cámara de aire de mis Nike'" }, // Antes 11.20
+            { time: 15.50, text: "Suelo esforzarme el doble cuándo la cosa va mal\nIgual me salgo con la mía porque me sé reinventar (yah, yah, yah)" }, // Antes 15.70
+            { time: 20.30, text: "Salto alto como un Jumpman (Jumpman, Jumpman)\nYo me compro Jordán, mami, no uso Balenciaga (Balenciaga)" }, // Antes 20.50
+            { time: 24.60, text: "Por la ciudad cazando fantasmas (fantasma')\nDe esos que quieren ser primera plana (¡prra!)" }, // Antes 24.80
+            { time: 29.10, text: "Saltando tan alto que la luna está a centímetro'\nLa police afuera vigilándome el perímetro" }, // Antes 29.30
+            { time: 33.50, text: "Siempre vivo rápido, ya rompí el velocímetro\nYa sé que estoy fresco, no hace falta ni decírmelo" } // Antes 33.70
         ];
 
         // Mensajes que aparecerán con el botón "Seguir" (MANUAL)
         const MENSAJES_FINALES = [
             "La letra me recordo lo poco que conozco de ti",
             "ojala asi a lo mejor me creas un poquito jsjs :)",
-            // RE-INCORPORACIÓN DEL TERCER MENSAJE
+            // TERCER MENSAJE RE-INCORPORADO
             "Sigue volando alto..." 
         ];
         
@@ -130,7 +131,7 @@
         let indiceActual = 0;
         let isPlaying = false;
         let isCustomSequenceActive = false;
-        let customMessageIndex = 0; // Índice para recorrer MENSAJES_FINALES
+        let customMessageIndex = 0; 
         const botonInicio = document.getElementById("botonInicio");
         const contenedorLetras = document.getElementById("contenedor-letras");
         const audioLuna = document.getElementById("audio-luna");
@@ -174,7 +175,6 @@
 
         // 2. Manejar el fin del audio para iniciar la secuencia de mensajes manual
         audioLuna.addEventListener("ended", () => {
-            // Este evento se dispara cuando la canción termina.
             if (!isCustomSequenceActive) {
                 isPlaying = false;
                 isCustomSequenceActive = true;
@@ -222,7 +222,7 @@
                     // Si la reproducción es exitosa, muestra el texto inicial vacío
                     typeWriter(SINCRONIZACION[0].text);
                 }).catch(e => {
-                    // Si falla el audio
+                    // Si falla el audio (Problema de archivo o ruta)
                     alert("No se pudo iniciar el audio. Por favor, asegúrate de que el archivo 'luna.mp3' sea válido y esté en minúsculas en GitHub."); 
                     console.error("Error de reproducción:", e);
                     reiniciarPrograma(); 
