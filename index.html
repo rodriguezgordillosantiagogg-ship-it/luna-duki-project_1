@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -100,13 +100,12 @@
 
     <script>
         // =================================================================
-        // SINCRONIZACIÓN AUTOMÁTICA (AJUSTADA AL MÁXIMO)
+        // DATOS DE SINCRONIZACIÓN Y MENSAJES
         // =================================================================
+
+        // La SINCRONIZACION solo contiene las letras de la canción (AUTOMÁTICO)
         const SINCRONIZACION = [
-            // ÁREA VACÍA AL INICIO
             { time: 0.0, text: "" }, 
-            
-            // LETRAS DE LA CANCIÓN 
             { time: 2.40, text: "Metido en mi mundo utópico\nCon tanto hielo que me creo nórdico (yah, yah, yah)" }, 
             { time: 6.70, text: "Usé lo' podere', no tengo Kalashnikov\nHijo de la luna, ojo telescópico (prr, Duko)" },
             { time: 11.20, text: "Ahora estoy flotando, ya soy anti gravedad\nDebe ser por la cámara de aire de mis Nike'" }, 
@@ -114,14 +113,15 @@
             { time: 20.50, text: "Salto alto como un Jumpman (Jumpman, Jumpman)\nYo me compro Jordán, mami, no uso Balenciaga (Balenciaga)" }, 
             { time: 24.80, text: "Por la ciudad cazando fantasmas (fantasma')\nDe esos que quieren ser primera plana (¡prra!)" }, 
             { time: 29.30, text: "Saltando tan alto que la luna está a centímetro'\nLa police afuera vigilándome el perímetro" }, 
-            { time: 33.70, text: "Siempre vivo rápido, ya rompí el velocímetro\nYa sé que estoy fresco, no hace falta ni decírmelo" }, 
-            
-            // MENSAJES FINALES SOLICITADOS
-            { time: 39.00, text: "La letra me recordo lo poco que conozco de ti" }, // Mensaje 1
-            { time: 42.50, text: "ojala asi a lo mejor me creas un poquito jsjs :)" }, // Mensaje 2
-            
-            // PUNTO FINAL para que el botón Reiniciar aparezca
-            { time: 46.00, text: "" } 
+            { time: 33.70, text: "Siempre vivo rápido, ya rompí el velocímetro\nYa sé que estoy fresco, no hace falta ni decírmelo" } 
+        ];
+
+        // Mensajes que aparecerán con el botón "Seguir" (MANUAL)
+        const MENSAJES_FINALES = [
+            "La letra me recordo lo poco que conozco de ti",
+            "ojala asi a lo mejor me creas un poquito jsjs :)",
+            // RE-INCORPORACIÓN DEL TERCER MENSAJE
+            "Sigue volando alto..." 
         ];
         
         // ===========================
@@ -129,6 +129,8 @@
         // ===========================
         let indiceActual = 0;
         let isPlaying = false;
+        let isCustomSequenceActive = false;
+        let customMessageIndex = 0; // Índice para recorrer MENSAJES_FINALES
         const botonInicio = document.getElementById("botonInicio");
         const contenedorLetras = document.getElementById("contenedor-letras");
         const audioLuna = document.getElementById("audio-luna");
@@ -137,29 +139,31 @@
         // FUNCIÓN DE ESCRITURA
         // ===========================
         function typeWriter(text) {
-            contenedorLetras.innerHTML = text.replace(/\n/g, '<br>');
+            contenedorLetras.innerHTML = text.replace(/\n/g, '<br>') || "<p>&nbsp;</p>";
         }
 
         // ===========================
         // FUNCIÓN DE REINICIO
-        // ===========================
+        // ===================================
         function reiniciarPrograma() {
             botonInicio.innerText = "Luna - Duki 🌙";
             contenedorLetras.innerHTML = "<p>&nbsp;</p>"; 
             indiceActual = 0;
             isPlaying = false;
+            isCustomSequenceActive = false;
+            customMessageIndex = 0;
             audioLuna.pause();
             audioLuna.currentTime = 0;
             botonInicio.disabled = false;
         }
 
         // ===========================
-        // EVENTO DE TIEMPO CLAVE (SINCRONIZACIÓN)
+        // EVENTO DE TIEMPO CLAVE (SINCRONIZACIÓN AUTOMÁTICA)
         // ===========================
         audioLuna.addEventListener("timeupdate", () => {
             const tiempoActual = audioLuna.currentTime;
             
-            if (!isPlaying) return;
+            if (!isPlaying || isCustomSequenceActive) return;
 
             // 1. Verificar si hay una nueva línea para mostrar
             if (indiceActual < SINCRONIZACION.length - 1 && tiempoActual >= SINCRONIZACION[indiceActual + 1].time) {
@@ -168,11 +172,18 @@
             }
         });
 
-        // 2. Manejar el fin del audio para mostrar el botón de Reiniciar
+        // 2. Manejar el fin del audio para iniciar la secuencia de mensajes manual
         audioLuna.addEventListener("ended", () => {
-            botonInicio.innerText = "Reiniciar";
-            botonInicio.disabled = false;
-            isPlaying = false; 
+            // Este evento se dispara cuando la canción termina.
+            if (!isCustomSequenceActive) {
+                isPlaying = false;
+                isCustomSequenceActive = true;
+                customMessageIndex = 0;
+                // Borra la última letra de la canción y pide seguir
+                typeWriter(""); 
+                botonInicio.innerText = "Seguir";
+                botonInicio.disabled = false;
+            }
         });
 
 
@@ -185,6 +196,22 @@
                 return; 
             }
 
+            // Flujo de mensajes finales (MANUAL)
+            if (isCustomSequenceActive) {
+                if (customMessageIndex < MENSAJES_FINALES.length) {
+                    // Muestra el siguiente mensaje
+                    typeWriter(MENSAJES_FINALES[customMessageIndex]);
+                    customMessageIndex++;
+                }
+                
+                // Si ya se mostró el último mensaje
+                if (customMessageIndex === MENSAJES_FINALES.length) {
+                    botonInicio.innerText = "Reiniciar";
+                }
+                return;
+            }
+
+            // Flujo de música y letras (AUTOMÁTICO)
             if (!isPlaying) {
                 // PRIMER CLIC: INICIAR
                 isPlaying = true;
@@ -192,10 +219,8 @@
                 botonInicio.innerText = "Reproduciendo..."; 
 
                 audioLuna.play().then(() => {
-                    // Si la reproducción es exitosa, muestra el texto en el tiempo 0.0 (que es vacío)
-                    if (SINCRONIZACION[0].time === 0.0) {
-                        typeWriter(SINCRONIZACION[0].text);
-                    }
+                    // Si la reproducción es exitosa, muestra el texto inicial vacío
+                    typeWriter(SINCRONIZACION[0].text);
                 }).catch(e => {
                     // Si falla el audio
                     alert("No se pudo iniciar el audio. Por favor, asegúrate de que el archivo 'luna.mp3' sea válido y esté en minúsculas en GitHub."); 
