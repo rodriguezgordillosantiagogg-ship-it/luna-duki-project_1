@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+      <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -101,28 +101,28 @@
 
     <script>
         // =================================================================
-        // SINCRONIZACIÓN AUTOMÁTICA (Tiempos ajustados a SU archivo de audio)
+        // SINCRONIZACIÓN AUTOMÁTICA (AJUSTADA AL MÁXIMO PARA SU AUDIO)
         // =================================================================
         const SINCRONIZACION = [
             // ELIMINADO EL MENSAJE DE INICIO
             { time: 0.0, text: "" }, 
             
-            // LETRAS DE LA CANCIÓN (Tiempos sincronizados)
-            { time: 2.50, text: "Metido en mi mundo utópico\nCon tanto hielo que me creo nórdico (yah, yah, yah)" }, 
-            { time: 6.80, text: "Usé lo' podere', no tengo Kalashnikov\nHijo de la luna, ojo telescópico (prr, Duko)" },
-            { time: 11.30, text: "Ahora estoy flotando, ya soy anti gravedad\nDebe ser por la cámara de aire de mis Nike'" }, 
-            { time: 15.80, text: "Suelo esforzarme el doble cuándo la cosa va mal\nIgual me salgo con la mía porque me sé reinventar (yah, yah, yah)" }, 
-            { time: 20.60, text: "Salto alto como un Jumpman (Jumpman, Jumpman)\nYo me compro Jordán, mami, no uso Balenciaga (Balenciaga)" }, 
-            { time: 24.90, text: "Por la ciudad cazando fantasmas (fantasma')\nDe esos que quieren ser primera plana (¡prra!)" }, 
-            { time: 29.40, text: "Saltando tan alto que la luna está a centímetro'\nLa police afuera vigilándome el perímetro" }, 
-            { time: 33.80, text: "Siempre vivo rápido, ya rompí el velocímetro\nYa sé que estoy fresco, no hace falta ni decírmelo" }, 
+            // LETRAS DE LA CANCIÓN (TIEMPOS RE-AJUSTADOS)
+            { time: 2.40, text: "Metido en mi mundo utópico\nCon tanto hielo que me creo nórdico (yah, yah, yah)" }, 
+            { time: 6.70, text: "Usé lo' podere', no tengo Kalashnikov\nHijo de la luna, ojo telescópico (prr, Duko)" },
+            { time: 11.20, text: "Ahora estoy flotando, ya soy anti gravedad\nDebe ser por la cámara de aire de mis Nike'" }, 
+            { time: 15.70, text: "Suelo esforzarme el doble cuándo la cosa va mal\nIgual me salgo con la mía porque me sé reinventar (yah, yah, yah)" }, 
+            { time: 20.50, text: "Salto alto como un Jumpman (Jumpman, Jumpman)\nYo me compro Jordán, mami, no uso Balenciaga (Balenciaga)" }, 
+            { time: 24.80, text: "Por la ciudad cazando fantasmas (fantasma')\nDe esos que quieren ser primera plana (¡prra!)" }, 
+            { time: 29.30, text: "Saltando tan alto que la luna está a centímetro'\nLa police afuera vigilándome el perímetro" }, 
+            { time: 33.70, text: "Siempre vivo rápido, ya rompí el velocímetro\nYa sé que estoy fresco, no hace falta ni decírmelo" }, 
             
             // MENSAJES FINALES SOLICITADOS
-            { time: 39.50, text: "La letra me recordo lo poco que conozco de ti" }, // Mensaje 1
-            { time: 43.00, text: "ojala asi a lo mejor me creas un poquito jsjs :)" }, // Mensaje 2
+            { time: 39.00, text: "La letra me recordo lo poco que conozco de ti" }, // Mensaje 1
+            { time: 42.50, text: "ojala asi a lo mejor me creas un poquito jsjs :)" }, // Mensaje 2
             
             // PUNTO FINAL para que el botón Reiniciar aparezca
-            { time: 46.50, text: "" } 
+            { time: 46.00, text: "" } 
         ];
         
         // ===========================
@@ -138,7 +138,6 @@
         // FUNCIÓN DE ESCRITURA
         // ===========================
         function typeWriter(text) {
-            // Asegura que el contenido se reemplace con la nueva letra
             contenedorLetras.innerHTML = text.replace(/\n/g, '<br>');
         }
 
@@ -177,7 +176,6 @@
             botonInicio.innerText = "Reiniciar";
             botonInicio.disabled = false;
             isPlaying = false; 
-            // Deja el contenedor vacío o con el último texto (el mensaje final)
         });
 
 
@@ -186,7 +184,6 @@
         // ===========================
         botonInicio.addEventListener("click", () => {
             if (botonInicio.innerText === "Reiniciar") {
-                // Si el texto es Reiniciar, llama a la función de Reinicio
                 reiniciarPrograma();
                 return; 
             }
@@ -198,12 +195,12 @@
                 botonInicio.innerText = "Reproduciendo..."; 
 
                 audioLuna.play().then(() => {
-                    // Si la reproducción es exitosa, muestra la primera línea inmediatamente si el tiempo es 0.0
+                    // Si la reproducción es exitosa, muestra la primera línea vacía
                     if (SINCRONIZACION[0].time === 0.0) {
                         typeWriter(SINCRONIZACION[0].text);
                     }
                 }).catch(e => {
-                    // Si falla el audio, se muestra el mensaje de error y se reinicia
+                    // Si falla el audio
                     alert("No se pudo iniciar el audio. Por favor, asegúrate de que el archivo 'luna.mp3' sea válido y esté en minúsculas en GitHub."); 
                     console.error("Error de reproducción:", e);
                     reiniciarPrograma(); // Reinicia el estado
