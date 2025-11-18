@@ -44,8 +44,8 @@
             z-index: 20;
             transition: all 0.3s ease-out; 
             
-            /* Para centrar el texto verticalmente */
-            display: flex;
+            /* OCULTO AL INICIO: Cambiado de 'flex' a 'none' para que solo se vea el botón */
+            display: none; 
             align-items: center;
             justify-content: center;
         }
@@ -55,7 +55,7 @@
             max-width: 600px;
             min-height: 150px;
             margin-bottom: 20px;
-            display: none; /* Oculto por CSS */
+            display: none; /* Inicia oculto */
             z-index: 20;
             /* Para centrar la imagen */
             display: flex;
@@ -118,38 +118,40 @@
 
     <script>
         // =================================================================
-        // DATOS DE SINCRONIZACIÓN (TIEMPOS EXACTOS DEL LRC AJUSTADOS POR LATENCIA)
+        // DATOS DE SINCRONIZACIÓN (TIEMPOS AJUSTADOS - 40ms antes de lo original)
         // =================================================================
 
+        const AJUSTE = 0.04; // 40 milisegundos
+
         const SINCRONIZACION = [
-            { time: 0.00, text: "" }, // Inicio
+            { time: 0.00, text: "" }, // Inicio sin ajuste
             
-            // TIEMPOS BASADOS EN TUS MARCAS LRC
-            { time: 1.23, text: "Metido en mi mundo utópico" }, 
-            { time: 2.79, text: "Con tanto hielo que me creo nórdico (yah, yah, yah)" }, 
-            { time: 4.24, text: "Usé lo' podere', no tengo Kalashnikov" }, 
-            { time: 6.19, text: "Hijo de la luna, ojo telescópico (prr, Duko)" }, 
-            { time: 9.46, text: "Ahora estoy flotando, ya soy anti gravedad" }, 
-            { time: 12.54, text: "Debe ser por la cámara de aire de mis Nike'" }, 
-            { time: 15.28, text: "Suelo esforzarme el doble cuándo la cosa va mal" }, 
-            { time: 18.98, text: "Igual me salgo con la mía porque me sé reinventar (yah, yah, yah)" }, 
-            { time: 22.16, text: "Salto alto como un Jumpman (Jumpman, Jumpman)" }, 
-            { time: 25.17, text: "Yo me compro Jordán, mami, no uso Balenciaga (Balenciaga)" }, 
-            { time: 28.77, text: "Por la ciudad cazando fantasmas (fantasma')" }, 
-            { time: 31.16, text: "De esos que quieren ser primera plana (¡prra!)" }, 
-            { time: 34.17, text: "Saltando tan alto que la luna está a centímetro'" }, 
-            { time: 37.23, text: "La police afuera vigilándome el perímetro" }, 
-            { time: 40.60, text: "Siempre vivo rápido, ya rompí el velocímetro" }, 
-            { time: 43.84, text: "Ya sé que estoy fresco, no hace falta ni decírmelo" }, 
+            // TIEMPOS ORIGINALES CON 40ms RESTADOS (t - 0.04)
+            { time: 1.19, text: "Metido en mi mundo utópico" },       // Original: 1.23
+            { time: 2.75, text: "Con tanto hielo que me creo nórdico (yah, yah, yah)" }, // Original: 2.79
+            { time: 4.20, text: "Usé lo' podere', no tengo Kalashnikov" }, // Original: 4.24
+            { time: 6.15, text: "Hijo de la luna, ojo telescópico (prr, Duko)" }, // Original: 6.19
+            { time: 9.42, text: "Ahora estoy flotando, ya soy anti gravedad" }, // Original: 9.46
+            { time: 12.50, text: "Debe ser por la cámara de aire de mis Nike'" }, // Original: 12.54
+            { time: 15.24, text: "Suelo esforzarme el doble cuándo la cosa va mal" }, // Original: 15.28
+            { time: 18.94, text: "Igual me salgo con la mía porque me sé reinventar (yah, yah, yah)" }, // Original: 18.98
+            { time: 22.12, text: "Salto alto como un Jumpman (Jumpman, Jumpman)" }, // Original: 22.16
+            { time: 25.13, text: "Yo me compro Jordán, mami, no uso Balenciaga (Balenciaga)" }, // Original: 25.17
+            { time: 28.73, text: "Por la ciudad cazando fantasmas (fantasma')" }, // Original: 28.77
+            { time: 31.12, text: "De esos que quieren ser primera plana (¡prra!)" }, // Original: 31.16
+            { time: 34.13, text: "Saltando tan alto que la luna está a centímetro'" }, // Original: 34.17
+            { time: 37.19, text: "La police afuera vigilándome el perímetro" }, // Original: 37.23
+            { time: 40.56, text: "Siempre vivo rápido, ya rompí el velocímetro" }, // Original: 40.60
+            { time: 43.80, text: "Ya sé que estoy fresco, no hace falta ni decírmelo" }, // Original: 43.84
             
-            // REPETICIÓN DEL CORO
-            { time: 46.76, text: "Saltando tan alto que la luna está a centímetro'" }, 
-            { time: 49.75, text: "La policía afuera vigilándono' el perímetro" }, 
-            { time: 53.09, text: "Mami, yo vivo rápido, rompimo' el velocímetro" }, 
-            { time: 57.04, text: "Sé que soy muy fresco, no hace falta ni decírmelo" }, 
-            { time: 59.63, text: "Saltando tan alto que la luna está a centímetro'" }, 
-            { time: 62.85, text: "La police afuera vigilándome el perímetro" }, 
-            { time: 65.91, text: "Siempre vivo rápido, ya rompí el velocímetro" } 
+            // REPETICIÓN DEL CORO (AJUSTADA)
+            { time: 46.72, text: "Saltando tan alto que la luna está a centímetro'" }, // Original: 46.76
+            { time: 49.71, text: "La policía afuera vigilándono' el perímetro" }, // Original: 49.75
+            { time: 53.05, text: "Mami, yo vivo rápido, rompimo' el velocímetro" }, // Original: 53.09
+            { time: 57.00, text: "Sé que soy muy fresco, no hace falta ni decírmelo" }, // Original: 57.04
+            { time: 59.59, text: "Saltando tan alto que la luna está a centímetro'" }, // Original: 59.63
+            { time: 62.81, text: "La police afuera vigilándome el perímetro" }, // Original: 62.85
+            { time: 65.87, text: "Siempre vivo rápido, ya rompí el velocímetro" } // Original: 65.91
         ];
 
         // ================================================================
@@ -190,10 +192,10 @@
             botonInicio.innerText = "Luna - Duki 🌙";
             contenedorLetras.innerHTML = "<p>&nbsp;</p>"; 
             
-            // Lógica para ocultar imagen y mostrar letras
+            // Ocultar imagen y Ocultar letras (Volver al estado inicial: solo botón)
             contenedorImagen.style.display = 'none';
-            contenedorLetras.style.display = 'flex'; 
-
+            contenedorLetras.style.display = 'none'; 
+            
             indiceActual = 0;
             isPlaying = false;
             isCustomSequenceActive = false;
@@ -275,6 +277,9 @@
                 botonInicio.disabled = true; 
                 botonInicio.innerText = "Reproduciendo..."; 
 
+                // Muestra el contenedor de letras al iniciar la reproducción.
+                contenedorLetras.style.display = 'flex'; 
+
                 audioLuna.play().then(() => {
                     // Si la reproducción es exitosa, muestra el texto inicial vacío
                     typeWriter(SINCRONIZACION[0].text);
@@ -296,14 +301,13 @@
         });
 
         // ==================================================
-        // GARANTÍA DE OCULTACIÓN (Asegura que la imagen NO aparezca al inicio)
+        // GARANTÍA DE OCULTACIÓN (Asegura el estado inicial)
         // ==================================================
         window.onload = () => {
              // 1. Asegura que el contenedor de la imagen esté oculto al inicio.
              contenedorImagen.style.display = 'none'; 
              
-             // 2. Muestra el texto inicial vacío.
-             typeWriter("<p>&nbsp;</p>");
+             // 2. El contenedorLetras se oculta por CSS, y se muestra en el primer clic.
         };
     </script>
 </body>
