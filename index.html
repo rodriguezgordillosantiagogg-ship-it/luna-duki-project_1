@@ -44,7 +44,7 @@
             z-index: 20;
             transition: all 0.3s ease-out; 
             
-            /* OCULTO AL INICIO: Cambiado de 'flex' a 'none' para que solo se vea el botón */
+            /* OCULTO AL INICIO: para que solo se vea el botón */
             display: none; 
             align-items: center;
             justify-content: center;
@@ -118,40 +118,40 @@
 
     <script>
         // =================================================================
-        // DATOS DE SINCRONIZACIÓN (TIEMPOS AJUSTADOS - 40ms antes de lo original)
+        // DATOS DE SINCRONIZACIÓN (TIEMPOS AJUSTADOS - 40ms y -150ms)
         // =================================================================
 
-        const AJUSTE = 0.04; // 40 milisegundos
-
         const SINCRONIZACION = [
-            { time: 0.00, text: "" }, // Inicio sin ajuste
+            { time: 0.00, text: "" }, // Inicio
             
-            // TIEMPOS ORIGINALES CON 40ms RESTADOS (t - 0.04)
-            { time: 1.19, text: "Metido en mi mundo utópico" },       // Original: 1.23
-            { time: 2.75, text: "Con tanto hielo que me creo nórdico (yah, yah, yah)" }, // Original: 2.79
-            { time: 4.20, text: "Usé lo' podere', no tengo Kalashnikov" }, // Original: 4.24
-            { time: 6.15, text: "Hijo de la luna, ojo telescópico (prr, Duko)" }, // Original: 6.19
-            { time: 9.42, text: "Ahora estoy flotando, ya soy anti gravedad" }, // Original: 9.46
-            { time: 12.50, text: "Debe ser por la cámara de aire de mis Nike'" }, // Original: 12.54
-            { time: 15.24, text: "Suelo esforzarme el doble cuándo la cosa va mal" }, // Original: 15.28
-            { time: 18.94, text: "Igual me salgo con la mía porque me sé reinventar (yah, yah, yah)" }, // Original: 18.98
-            { time: 22.12, text: "Salto alto como un Jumpman (Jumpman, Jumpman)" }, // Original: 22.16
-            { time: 25.13, text: "Yo me compro Jordán, mami, no uso Balenciaga (Balenciaga)" }, // Original: 25.17
-            { time: 28.73, text: "Por la ciudad cazando fantasmas (fantasma')" }, // Original: 28.77
-            { time: 31.12, text: "De esos que quieren ser primera plana (¡prra!)" }, // Original: 31.16
-            { time: 34.13, text: "Saltando tan alto que la luna está a centímetro'" }, // Original: 34.17
-            { time: 37.19, text: "La police afuera vigilándome el perímetro" }, // Original: 37.23
-            { time: 40.56, text: "Siempre vivo rápido, ya rompí el velocímetro" }, // Original: 40.60
-            { time: 43.80, text: "Ya sé que estoy fresco, no hace falta ni decírmelo" }, // Original: 43.84
+            // Versos 1-6 (Ajuste de -40ms)
+            { time: 1.19, text: "Metido en mi mundo utópico" },       
+            { time: 2.75, text: "Con tanto hielo que me creo nórdico (yah, yah, yah)" }, 
+            { time: 4.20, text: "Usé lo' podere', no tengo Kalashnikov" }, 
+            { time: 6.15, text: "Hijo de la luna, ojo telescópico (prr, Duko)" }, 
+            { time: 9.42, text: "Ahora estoy flotando, ya soy anti gravedad" }, 
             
-            // REPETICIÓN DEL CORO (AJUSTADA)
-            { time: 46.72, text: "Saltando tan alto que la luna está a centímetro'" }, // Original: 46.76
-            { time: 49.71, text: "La policía afuera vigilándono' el perímetro" }, // Original: 49.75
-            { time: 53.05, text: "Mami, yo vivo rápido, rompimo' el velocímetro" }, // Original: 53.09
-            { time: 57.00, text: "Sé que soy muy fresco, no hace falta ni decírmelo" }, // Original: 57.04
-            { time: 59.59, text: "Saltando tan alto que la luna está a centímetro'" }, // Original: 59.63
-            { time: 62.81, text: "La police afuera vigilándome el perímetro" }, // Original: 62.85
-            { time: 65.87, text: "Siempre vivo rápido, ya rompí el velocímetro" } // Original: 65.91
+            // Versos 7 en adelante (Ajuste de -150ms)
+            { time: 12.39, text: "Debe ser por la cámara de aire de mis Nike'" }, 
+            { time: 15.13, text: "Suelo esforzarme el doble cuándo la cosa va mal" }, 
+            { time: 18.83, text: "Igual me salgo con la mía porque me sé reinventar (yah, yah, yah)" }, 
+            { time: 22.01, text: "Salto alto como un Jumpman (Jumpman, Jumpman)" }, 
+            { time: 25.02, text: "Yo me compro Jordán, mami, no uso Balenciaga (Balenciaga)" }, 
+            { time: 28.62, text: "Por la ciudad cazando fantasmas (fantasma')" }, 
+            { time: 31.01, text: "De esos que quieren ser primera plana (¡prra!)" }, 
+            { time: 34.02, text: "Saltando tan alto que la luna está a centímetro'" }, 
+            { time: 37.08, text: "La police afuera vigilándome el perímetro" }, 
+            { time: 40.45, text: "Siempre vivo rápido, ya rompí el velocímetro" }, 
+            { time: 43.69, text: "Ya sé que estoy fresco, no hace falta ni decírmelo" }, 
+            
+            // REPETICIÓN DEL CORO (Ajuste de -150ms)
+            { time: 46.61, text: "Saltando tan alto que la luna está a centímetro'" }, 
+            { time: 49.60, text: "La policía afuera vigilándono' el perímetro" }, 
+            { time: 52.94, text: "Mami, yo vivo rápido, rompimo' el velocímetro" }, 
+            { time: 56.89, text: "Sé que soy muy fresco, no hace falta ni decírmelo" }, 
+            { time: 59.48, text: "Saltando tan alto que la luna está a centímetro'" }, 
+            { time: 62.70, text: "La police afuera vigilándome el perímetro" }, 
+            { time: 65.76, text: "Siempre vivo rápido, ya rompí el velocímetro" } 
         ];
 
         // ================================================================
